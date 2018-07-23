@@ -11,7 +11,7 @@ public class MainWindow {
 
         loginUI.setVisible(true);
         Runnable rb = new Runnable() {
-            @Override
+
             public void run() {
                 loginUI.dragTheWindow();
             }
