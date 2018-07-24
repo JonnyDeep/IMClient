@@ -1,10 +1,14 @@
 package sample;
 
+import Entity.User;
 import com.sun.deploy.panel.JavaPanel;
 import com.sun.javaws.JAuthenticator;
 import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 import sun.plugin.dom.core.CoreConstants;
+import utils.Login;
+import utils.SystemValue;
 
+import javax.jws.soap.SOAPBinding;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -122,13 +126,15 @@ public class LoginUI extends JFrame{
         jNamePwdPanel.setPreferredSize(new Dimension(190,100));
 //        jNamePwdPanel.setBackground(Color.BLUE);
 
-        JEditorPane jUserName = new JEditorPane();
+        JTextField jUserName = new JTextField();
         jUserName.setPreferredSize(new Dimension(190,30));
+        jUserName.setBorder(null);
 //        jUserName.setSize(190,30);
 
         JPasswordField jPasswordField = new JPasswordField();
         jPasswordField.setPreferredSize(new Dimension(190,30));
         jPasswordField.setBorder(null);
+        jUserName.requestFocus(true);
 
         JCheckBox jRememberPwd  = new JCheckBox("记住密码");
         jRememberPwd.setOpaque(false);
@@ -211,7 +217,60 @@ public class LoginUI extends JFrame{
                 System.exit(0);
             }
         });
+
+        jLoginBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+//                String name = jUserName.getText().trim();
+//                String pwd = jPasswordField.getText().trim();
+                User user = new User();
+                user.setName(jUserName.getText().trim());
+                user.setPassword(jPasswordField.getText().trim());
+                if(user.getName()!=""&&user.getName()!=null&&user.getPassword()!=""&&user.getPassword()!=null){
+
+                    Login login = new Login();
+
+                    try {
+                        if(login.loginDB(user)==SystemValue.LOGINSUCCESS){
+                            jf.setVisible(false);
+                            ChatUI chatUI = new ChatUI();
+                        }
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        jLoginBtn.registerKeyboardAction(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                User user = new User();
+                user.setName(jUserName.getText().trim());
+                user.setPassword(jPasswordField.getText().trim());
+                if(user.getName()!=""&&user.getName()!=null&&user.getPassword()!=""&&user.getPassword()!=null){
+
+                    Login login = new Login();
+
+                    try {
+                        if(login.loginDB(user)==SystemValue.LOGINSUCCESS){
+                            jf.setVisible(false);
+                            ChatUI chatUI = new ChatUI();
+                        }
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        },KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0),JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+
+
     }
+
+
     class DragWindow extends MouseAdapter{
         private Point MouseDownCompCoords = null;
 

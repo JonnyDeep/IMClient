@@ -15,7 +15,9 @@ public class MainWindow {
             public void run() {
                 loginUI.dragTheWindow();
             }
+
         };
         SwingUtilities.invokeLater(rb);
+
     }
 }
