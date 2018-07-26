@@ -1,6 +1,7 @@
 package sample;
 
 import Entity.User;
+import com.sun.awt.AWTUtilities;
 import com.sun.deploy.panel.JavaPanel;
 import com.sun.javaws.JAuthenticator;
 import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
@@ -12,6 +13,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class LoginUI extends JFrame{
     private JFrame jf;
@@ -234,7 +236,15 @@ public class LoginUI extends JFrame{
                     try {
                         if(login.loginDB(user)==SystemValue.LOGINSUCCESS){
                             jf.setVisible(false);
-                            ChatUI chatUI = new ChatUI();
+                            Client client = new Client("127.0.0.1",8080,8088);
+                            ChatUI chatUI = new ChatUI(client);
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    chatUI.dragTheWindow();
+                                }
+                            };
+                            SwingUtilities.invokeLater(runnable);
                         }
                     } catch (Exception e1) {
                         e1.printStackTrace();
@@ -257,7 +267,21 @@ public class LoginUI extends JFrame{
                     try {
                         if(login.loginDB(user)==SystemValue.LOGINSUCCESS){
                             jf.setVisible(false);
-                            ChatUI chatUI = new ChatUI();
+
+                            Client client = new Client("127.0.0.1",8080,8088);
+                            ChatUI chatUI = new ChatUI(client);
+
+
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    chatUI.dragTheWindow();
+                                }
+                            };
+                            SwingUtilities.invokeLater(runnable);
+                            Thread t = new Thread(chatUI);
+                            t.start();
+
                         }
                     } catch (Exception e1) {
                         e1.printStackTrace();
