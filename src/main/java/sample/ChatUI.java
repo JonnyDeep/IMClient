@@ -1,6 +1,7 @@
 package sample;
 
 import Entity.Message;
+import Entity.User;
 import com.google.gson.Gson;
 import com.sun.awt.AWTUtilities;
 import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
@@ -25,11 +26,15 @@ public class ChatUI extends JFrame implements Runnable {
     private static Client client;
     private JEditorPane jTextPane;
     private JLabel jname;
+    private static User user;
     public static void setClient(Client c){
         client = c;
     }
 
-    public ChatUI(Client c){
+
+
+    public ChatUI(Client c,User u){
+        user = u;
         client = c;
         jFrame = new JFrame();
         jFrame.setSize(new Dimension(600,600));
@@ -88,7 +93,7 @@ public class ChatUI extends JFrame implements Runnable {
         jname = new JLabel();
         if(client!=null)
         {
-            jname.setText(client.getSocket().getLocalAddress().toString()+" "+client.getSocket().getLocalPort());
+            jname.setText(user.getName());
         }
 
         jname.setSize(new Dimension(100,30));
@@ -252,8 +257,13 @@ public class ChatUI extends JFrame implements Runnable {
                 jEditorPane.setText("");
 //                System.out.println(jEditorPane.getText()+context+"\n");
 
+                String message;
+                if(client.getSocket().getLocalPort()==8089){
+                    message= "{\"sendIP\":\"127.0.0.1:8089\",\"RecvIP\":\"127.0.0.1:8090\",\"msg\":\""+context+"\"}";
+                }else{
+                    message= "{\"sendIP\":\"127.0.0.1:8090\",\"RecvIP\":\"127.0.0.1:8089\",\"msg\":\""+context+"\"}";
+                }
 
-                String message = "{\"sendIP\":\"127.0.0.1:8088\",\"RecvIP\":\"127.0.0.1:8090\",\"msg\":\""+context+"\"}";
                 if(client!=null){
                     client.sendMessage(message);
                 }

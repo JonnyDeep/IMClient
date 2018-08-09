@@ -236,8 +236,9 @@ public class LoginUI extends JFrame{
                     try {
                         if(login.loginDB(user)==SystemValue.LOGINSUCCESS){
                             jf.setVisible(false);
-                            Client client = new Client("127.0.0.1",8080,8088);
-                            ChatUI chatUI = new ChatUI(client);
+                            System.out.println(user.toString());
+                            Client client = new Client("127.0.0.1",8080,user.getPort());
+                            ChatUI chatUI = new ChatUI(client,user);
                             Runnable runnable = new Runnable() {
                                 @Override
                                 public void run() {
@@ -268,8 +269,10 @@ public class LoginUI extends JFrame{
                         if(login.loginDB(user)==SystemValue.LOGINSUCCESS){
                             jf.setVisible(false);
 
-                            Client client = new Client("127.0.0.1",8080,8088);
-                            ChatUI chatUI = new ChatUI(client);
+
+
+                            Client client = new Client("127.0.0.1",8080,user.getPort());
+                            ChatUI chatUI = new ChatUI(client,user);
 
 
                             Runnable runnable = new Runnable() {
